@@ -103,30 +103,71 @@
 
           <div class="bg-white widget border rounded">
 
+
+            @if (\Session::has('success')) 
+                <div class="alert alert-success">
+                        <p>{!! \Session::get('success') !!}</p>
+                </div>
+            @endif   
+
+
+
             <h3 class="h4 text-black widget-title mb-3">Contact Agent</h3>
-            <form action="" class="form-contact-agent">
+          
+          
+          
+            <form  method="post" action="{{route('make.request' ,$propDetaile->prop_id)}}" class="form-contact-agent">
+              @csrf
+
+
+              <input type="text" id="prop_id" name="prop_id" value="{{$propDetaile->prop_id}}" class="form-control" hidden required>
+              <input type="text" id="agent_name" name="agent_name" value="{{$propDetaile->agent_name}}" class="form-control"  hidden required>
+
               <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" class="form-control">
+                <input type="text" id="name" name="name" class="form-control" required> 
               </div>
+
+              @error('name')
+              <span class="text-danger">{{$message}}</span>
+              @enderror
+
+
               <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" class="form-control">
+                <input type="email" id="email" name="email" class="form-control" required>
               </div>
+
+              @error('email')
+              <span class="text-danger">{{$message}}</span>
+              @enderror
+
+
               <div class="form-group">
-                <label for="phone">Phone</label>
-                <input type="text" id="phone" class="form-control">
+                <label for="phone">Message</label>
+                <input type="text" id="message" name="message" class="form-control" required>
               </div>
+
+              @error('message')
+              <span class="text-danger">{{$message}}</span>
+              @enderror
+
+
+              
+
               <div class="form-group">
-                <input type="submit" id="phone" class="btn btn-primary" value="Send Message">
+                <input type="submit" id="phone" name="submit" class="btn btn-primary" value="Send Message">
               </div>
+           
+           
+           
             </form>
           </div>
 
           <div class="bg-white widget border rounded">
             <h3 class="h4 text-black widget-title mb-3 ml-0">Share</h3>
                 <div class="px-3" style="margin-left: -15px;">
-                  <a href="https://www.facebook.com/sharer/sharer.php?u=&quote=" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-facebook"></span></a>
+                  <a href="https://www.facebook.com/sharer/sharer.php?u={{route('prop.detaile' , $propDetaile->prop_id)}}&quote={{$propDetaile->title}}" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-facebook"></span></a>
                   <a  href="https://twitter.com/intent/tweet?text=&url=" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-twitter"></span></a>
                   <a href="https://www.linkedin.com/sharing/share-offsite/?url=" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-linkedin"></span></a>    
                 </div>            
@@ -150,112 +191,69 @@
       </div>
     
       <div class="row mb-5">
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="property-entry h-100">
-            <a href="property-details.html" class="property-thumbnail">
-              <div class="offer-type-wrap">
-                <span class="offer-type bg-danger">Sale</span>
-                <span class="offer-type bg-success">Rent</span>
-              </div>
-              <img src="images/img_1.jpg" alt="Image" class="img-fluid">
-            </a>
-            <div class="p-4 property-body">
-              <a href="#" class="property-favorite"><span class="icon-heart-o"></span></a>
-              <h2 class="property-title"><a href="property-details.html">625 S. Berendo St</a></h2>
-              <span class="property-location d-block mb-3"><span class="property-icon icon-room"></span> 625 S. Berendo St Unit 607 Los Angeles, CA 90005</span>
-              <strong class="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
-              <ul class="property-specs-wrap mb-3 mb-lg-0">
-                <li>
-                  <span class="property-specs">Beds</span>
-                  <span class="property-specs-number">2 <sup>+</sup></span>
-                  
-                </li>
-                <li>
-                  <span class="property-specs">Baths</span>
-                  <span class="property-specs-number">2</span>
-                  
-                </li>
-                <li>
-                  <span class="property-specs">SQ FT</span>
-                  <span class="property-specs-number">7,000</span>
-                  
-                </li>
-              </ul>
+        @if ($relproperties->count() > 0)
 
-            </div>
-          </div>
-        </div>
+              @foreach ( $relproperties as $relprop )
 
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="property-entry h-100">
-            <a href="property-details.html" class="property-thumbnail">
-              <div class="offer-type-wrap">
-                <span class="offer-type bg-danger">Sale</span>
-                <span class="offer-type bg-success">Rent</span>
-              </div>
-              <img src="images/img_2.jpg" alt="Image" class="img-fluid">
-            </a>
-            <div class="p-4 property-body">
-              <a href="#" class="property-favorite active"><span class="icon-heart-o"></span></a>
-              <h2 class="property-title"><a href="property-details.html">871 Crenshaw Blvd</a></h2>
-              <span class="property-location d-block mb-3"><span class="property-icon icon-room"></span> 1 New York Ave, Warners Bay, NSW 2282</span>
-              <strong class="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
-              <ul class="property-specs-wrap mb-3 mb-lg-0">
-                <li>
-                  <span class="property-specs">Beds</span>
-                  <span class="property-specs-number">2 <sup>+</sup></span>
+                      @if ( $relprop->deal_type == $propDetaile->deal_type )
+                      
+                      <div class="col-md-6 col-lg-4 mb-4">
                   
-                </li>
-                <li>
-                  <span class="property-specs">Baths</span>
-                  <span class="property-specs-number">2</span>
-                  
-                </li>
-                <li>
-                  <span class="property-specs">SQ FT</span>
-                  <span class="property-specs-number">1,620</span>
-                  
-                </li>
-              </ul>
+                        
+                        <div class="property-entry h-100">
+                          <a href="{{route('prop.detaile' , $relprop->prop_id)}}" class="property-thumbnail">
+                            <div class="offer-type-wrap">
+                              <span class="offer-type bg-info">{{$relprop->deal_type}}</span>
+                            </div>
+                            <img src="{{asset('assets/images/'.$relprop->bgimage.'')}}" alt="Image" class="img-fluid">
+                          </a>
+                          <div class="p-4 property-body">
+                            <a href="#" class="property-favorite"><span class="icon-heart-o"></span></a>
+                            <h2 class="property-title"><a href="property-details.html">{{$relprop->title}}</a></h2>
+                            <span class="property-location d-block mb-3"><span class="property-icon icon-room"></span>{{$relprop->address}}</span>
+                            <strong class="property-price text-primary mb-3 d-block text-success">{{$relprop->price}}</strong>
+                            <ul class="property-specs-wrap mb-3 mb-lg-0">
+                              <li>
+                                <span class="property-specs">Beds</span>
+                                <span class="property-specs-number">{{$relprop->beds}} <sup>+</sup></span>
+                                
+                              </li>
+                              <li>
+                                <span class="property-specs">Baths</span>
+                                <span class="property-specs-number">{{$relprop->baths}}</span>
+                                
+                              </li>
+                              <li>
+                                <span class="property-specs">SQ FT</span>
+                                <span class="property-specs-number">{{$relprop->sqft}}</span>
+                                
+                              </li>
+                            </ul>
 
-            </div>
-          </div>
-        </div>
+                          </div>
+                        </div>
+                        
 
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="property-entry h-100">
-            <a href="property-details.html" class="property-thumbnail">
-              <div class="offer-type-wrap">
-                <span class="offer-type bg-info">Lease</span>
-              </div>
-              <img src="images/img_3.jpg" alt="Image" class="img-fluid">
-            </a>
-            <div class="p-4 property-body">
-              <a href="#" class="property-favorite"><span class="icon-heart-o"></span></a>
-              <h2 class="property-title"><a href="property-details.html">853 S Lucerne Blvd</a></h2>
-              <span class="property-location d-block mb-3"><span class="property-icon icon-room"></span> 853 S Lucerne Blvd Unit 101 Los Angeles, CA 90005</span>
-              <strong class="property-price text-primary mb-3 d-block text-success">$2,265,500</strong>
-              <ul class="property-specs-wrap mb-3 mb-lg-0">
-                <li>
-                  <span class="property-specs">Beds</span>
-                  <span class="property-specs-number">2 <sup>+</sup></span>
                   
-                </li>
-                <li>
-                  <span class="property-specs">Baths</span>
-                  <span class="property-specs-number">2</span>
                   
-                </li>
-                <li>
-                  <span class="property-specs">SQ FT</span>
-                  <span class="property-specs-number">5,500</span>
-                  
-                </li>
-              </ul>
+                      </div>
 
-            </div>
-          </div>
-        </div>
+                      @endif
+                      
+              @endforeach
+
+
+        @else
+
+                
+        <p>No Properties Found</p>
+        
+        @endif
+        
+
+
+
+
       </div>
     </div>
     
