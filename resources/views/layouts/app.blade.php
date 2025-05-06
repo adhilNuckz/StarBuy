@@ -119,10 +119,10 @@
 
                             <ul class="site-menu js-clone-nav d-none d-lg-block">
                                 <li class="active">
-                                    <a href="index.html">Home</a>
+                                    <a href="{{route('home')}}">Home</a>
                                 </li>
-                                <li><a href="buy.html">Buy</a></li>
-                                <li><a href="rent.html">Rent</a></li>
+                                <li><a href="{{route('prop.buy')}}">Buy</a></li>
+                                <li><a href="{{route('prop.rent')}}">Rent</a></li>
                                 <li class="has-children">
                                     <a href="properties.html">Properties</a>
                                     <ul class="dropdown arrow-top">
@@ -267,7 +267,7 @@
                       <div class="col-md-6 col-lg-6">
                           <ul class="list-unstyled">
                               <li><a href="#">Home</a></li>
-                              <li><a href="#">Buy</a></li>
+                              <li><a href="{{route('prop.buy')}}">Buy</a></li>
                               <li><a href="#">Rent</a></li>
                               <li><a href="#">Properties</a></li>
                           </ul>
